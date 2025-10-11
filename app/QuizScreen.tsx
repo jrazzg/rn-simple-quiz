@@ -24,6 +24,11 @@ const QuizScreen = () => {
         setCount(prev => prev + 1);
     }
 
+    /*
+        TO DO:
+        - display ANSWERS and QUESTION_NUM after 5 
+    */
+
     return (
         <View style={styles.container}>
             <View>
