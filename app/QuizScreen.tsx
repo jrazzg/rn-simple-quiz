@@ -7,16 +7,13 @@ const QuizScreen = () => {
     const randomNumber = Math.floor(Math.random() * 30);
     const [question, setQuestion] = useState<string>(questions[randomNumber].question);
     const [choices, setChoices] = useState<string[]>(questions[randomNumber].choices);
-    const [answer, setAnswer] = useState<string>(questions[randomNumber].answer);
+    const [answer, setAnswer] = useState<string>();
     const [count, setCount] = useState<number>(1);
     const [usedNum, setUsedNum] = useState<number[]>([randomNumber]);
-    
-    // ====== TO DO ======
-    //Style selectedAnswer
 
     const router = useRouter();
     const nextQuestion = () => {
-        if (count > 4){
+        if (count > 4) {
             return router.push('/ResultsScreen');
         }
         const newRandomNum = Math.floor(Math.random() * 30);
@@ -24,7 +21,6 @@ const QuizScreen = () => {
         setUsedNum([...usedNum, newRandomNum]);
         setQuestion(questions[newRandomNum].question);
         setChoices(questions[newRandomNum].choices);
-        setAnswer(questions[newRandomNum].answer);
         setCount(prev => prev + 1);
     }
 
@@ -34,13 +30,17 @@ const QuizScreen = () => {
                 <Text>QUESTION {count}</Text>
                 <Text style={styles.question}>{question}</Text>
                 {
-                    choices.map((item, index) => 
-                        <TouchableOpacity key={index} onPress={() => setAnswer(item)}><Text style={styles.choice}>{item}</Text></TouchableOpacity>
+                    choices.map((item, index) =>
+                        <TouchableOpacity
+                            key={index} 
+                            onPress={() => setAnswer(item)}>
+                                <Text 
+                                    style={[styles.choice, {
+                                        backgroundColor: answer === item ? '#1098e7ff' : '#dbdbdbff',
+                                        color: answer === item ? 'white' : 'black'
+                                    }]}>{item}</Text></TouchableOpacity>
                     )
                 }
-                <Text>SELECTED ANSWER: {answer}</Text>
-                <Text>Number: {randomNumber}</Text>
-                <Text>USED: {usedNum}</Text>
             </View>
             <TouchableOpacity onPress={nextQuestion}><Text style={styles.button}>NEXT</Text></TouchableOpacity>
         </View>
