@@ -4,30 +4,28 @@ import { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const QuizScreen = () => {
-    const [randomNumber, setRandomNumber] = useState<number>(Math.floor(Math.random() * 30));
+    const randomNumber = Math.floor(Math.random() * 30);
     const [question, setQuestion] = useState<string>(questions[randomNumber].question);
     const [choices, setChoices] = useState<string[]>(questions[randomNumber].choices);
     const [answer, setAnswer] = useState<string>(questions[randomNumber].answer);
     const [count, setCount] = useState<number>(1);
     const [usedNum, setUsedNum] = useState<number[]>([randomNumber]);
+    
     // ====== TO DO ======
-    //Keep an array for used numbers :: getNewRandom()
     //Style selectedAnswer
 
     const router = useRouter();
     const nextQuestion = () => {
-        setCount(prev => prev + 1);
         if (count > 4){
             return router.push('/ResultsScreen');
         }
+        const newRandomNum = Math.floor(Math.random() * 30);
 
-        setRandomNumber(Math.floor(Math.random() * 30));
-        setUsedNum([...usedNum, randomNumber])
-        setQuestion(questions[randomNumber].question);
-        setChoices(questions[randomNumber].choices);
-        setAnswer(questions[randomNumber].answer);
-        console.log("Count: ", count);
-        console.log("USED: ", usedNum);
+        setUsedNum([...usedNum, newRandomNum]);
+        setQuestion(questions[newRandomNum].question);
+        setChoices(questions[newRandomNum].choices);
+        setAnswer(questions[newRandomNum].answer);
+        setCount(prev => prev + 1);
     }
 
     return (
