@@ -1,4 +1,5 @@
 import questions from "@/assets/data/questions";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
@@ -8,13 +9,25 @@ const QuizScreen = () => {
     const [choices, setChoices] = useState<string[]>(questions[randomNumber].choices);
     const [answer, setAnswer] = useState<string>(questions[randomNumber].answer);
     const [count, setCount] = useState<number>(1);
+    const [usedNum, setUsedNum] = useState<number[]>([randomNumber]);
+    // ====== TO DO ======
+    //Keep an array for used numbers :: getNewRandom()
+    //Style selectedAnswer
 
+    const router = useRouter();
     const nextQuestion = () => {
         setCount(prev => prev + 1);
+        if (count > 4){
+            return router.push('/ResultsScreen');
+        }
+
         setRandomNumber(Math.floor(Math.random() * 30));
+        setUsedNum([...usedNum, randomNumber])
         setQuestion(questions[randomNumber].question);
         setChoices(questions[randomNumber].choices);
         setAnswer(questions[randomNumber].answer);
+        console.log("Count: ", count);
+        console.log("USED: ", usedNum);
     }
 
     return (
@@ -29,6 +42,7 @@ const QuizScreen = () => {
                 }
                 <Text>SELECTED ANSWER: {answer}</Text>
                 <Text>Number: {randomNumber}</Text>
+                <Text>USED: {usedNum}</Text>
             </View>
             <TouchableOpacity onPress={nextQuestion}><Text style={styles.button}>NEXT</Text></TouchableOpacity>
         </View>
