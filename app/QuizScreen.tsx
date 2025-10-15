@@ -1,18 +1,28 @@
 import questions from "@/assets/data/questions";
+import { QuizContext } from "@/context/QuizContext";
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const QuizScreen = () => {
     const randomNumber = Math.floor(Math.random() * 30);
     const [question, setQuestion] = useState<string>(questions[randomNumber].question);
     const [choices, setChoices] = useState<string[]>(questions[randomNumber].choices);
-    const [answer, setAnswer] = useState<string>();
+    const [answer, setAnswer] = useState<string>('');
     const [count, setCount] = useState<number>(1);
     const [usedNum, setUsedNum] = useState<number[]>([randomNumber]);
+    const quizContext = useContext(QuizContext);
+    if (!quizContext) throw new Error('Context not available.');
+    const { updateList } = quizContext;
 
     const router = useRouter();
-    const nextQuestion = () => {
+    const nextQuestion = (ans: string, id: number, ask: string) => {
+        // let ansList = [];
+        // ansList.push({ id: id, answer: ans, question: ask })
+        // console.log(ansList)
+
+        updateList(id, ans)
+
         if (count > 4) {
             return router.push('/ResultsScreen');
         }
@@ -22,7 +32,7 @@ const QuizScreen = () => {
         setQuestion(questions[newRandomNum].question);
         setChoices(questions[newRandomNum].choices);
         setCount(prev => prev + 1);
-    }
+    };
 
     /*
         TO DO:
@@ -37,17 +47,17 @@ const QuizScreen = () => {
                 {
                     choices.map((item, index) =>
                         <TouchableOpacity
-                            key={index} 
+                            key={index}
                             onPress={() => setAnswer(item)}>
-                                <Text 
-                                    style={[styles.choice, {
-                                        backgroundColor: answer === item ? '#1098e7ff' : '#dbdbdbff',
-                                        color: answer === item ? 'white' : 'black'
-                                    }]}>{item}</Text></TouchableOpacity>
+                            <Text
+                                style={[styles.choice, {
+                                    backgroundColor: answer === item ? '#1098e7ff' : '#dbdbdbff',
+                                    color: answer === item ? 'white' : 'black'
+                                }]}>{item}</Text></TouchableOpacity>
                     )
                 }
             </View>
-            <TouchableOpacity onPress={nextQuestion}><Text style={styles.button}>NEXT</Text></TouchableOpacity>
+            <TouchableOpacity onPress={() => nextQuestion(answer, randomNumber, question)}><Text style={styles.button}>NEXT</Text></TouchableOpacity>
         </View>
     )
 }
