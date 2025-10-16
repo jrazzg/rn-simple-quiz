@@ -40,7 +40,7 @@ const QuizScreen = () => {
     return (
         <View style={styles.container}>
             <View>
-                <Text>QUESTION {count} | {randomNumber}</Text>
+                <Text>QUESTION {count}</Text>
                 <Text style={styles.question}>{question}</Text>
                 {
                     choices.map((item, index) =>
@@ -91,11 +91,3 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
 })
-
-/*
-15  9   19
-18  9   10
-14  29  3
-11  20  12
-1   0   18
-*/

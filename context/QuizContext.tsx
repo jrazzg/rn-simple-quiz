@@ -8,6 +8,7 @@ type AnswerListType = {
 type QuizContextType = {
     answers: AnswerListType[];
     updateList: (id: number, answer: string) => void;
+    resetList: () => void;
 }
 
 export const QuizContext = createContext<QuizContextType | undefined>(undefined);
@@ -21,11 +22,13 @@ const QuizProvider = ({children}: QuizProviderProps) => {
 
     const updateList = (id: number, answer: string) => {
         setAnswers([...answers, {id, answer}])
-        console.log(answer)
+    }
+    const resetList = () => {
+        setAnswers([]);
     }
 
     return (
-        <QuizContext.Provider value={{ answers, updateList }}> 
+        <QuizContext.Provider value={{ answers, updateList, resetList }}> 
             {children}
         </QuizContext.Provider>
     )
