@@ -10,17 +10,14 @@ const ResultsScreen = () => {
 
     return (
         <View style={styles.container}>
-            <Text>Results Screen</Text>
             {
                 answers.map((item, index) =>
-                    <View key={index}>
-                        <Text>ID: {item.id}</Text>
-                        <Text>QUESTN: {questions[item.id].question}</Text>
-                        <Text>ANSWER: {item.answer}</Text>
+                    <View style={[styles.answersContainer, {backgroundColor: item.answer === questions[item.id].answer ? '#91f896ff' : '#fddedeff'}]} key={index}>
+                        <Text style={styles.question}>{questions[item.id].question}</Text>
+                        <Text style={styles.answer}>{item.answer}</Text>
                     </View>
                 )
             }
-            <Text>ENDD Screen</Text>
         </View>
     )
 }
@@ -32,5 +29,19 @@ const styles = StyleSheet.create({
         marginTop: 80,
         flex: 1,
         margin: 20,
+    },
+    answersContainer: {
+        marginBottom: 20,
+        padding: 20,
+        borderRadius: 10,
+    },
+    question: {
+        fontSize: 20,
+        fontWeight: '500',
+        marginBottom: 10,
+    },
+    answer: {
+        fontSize: 18,
+        fontWeight: '500',
     },
 })

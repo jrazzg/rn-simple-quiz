@@ -5,7 +5,7 @@ import { useContext, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const QuizScreen = () => {
-    const randomNumber = Math.floor(Math.random() * 30);
+    const [randomNumber, setRandomNumber] = useState<number>(Math.floor(Math.random() * 30));
     const [question, setQuestion] = useState<string>(questions[randomNumber].question);
     const [choices, setChoices] = useState<string[]>(questions[randomNumber].choices);
     const [answer, setAnswer] = useState<string>('');
@@ -17,32 +17,30 @@ const QuizScreen = () => {
 
     const router = useRouter();
     const nextQuestion = (ans: string, id: number, ask: string) => {
-        // let ansList = [];
-        // ansList.push({ id: id, answer: ans, question: ask })
-        // console.log(ansList)
 
         updateList(id, ans)
+        console.log('ID: ', id, "ANS: ", ans, "QUST: ", ask)
 
         if (count > 4) {
             return router.push('/ResultsScreen');
         }
-        const newRandomNum = Math.floor(Math.random() * 30);
 
-        setUsedNum([...usedNum, newRandomNum]);
-        setQuestion(questions[newRandomNum].question);
-        setChoices(questions[newRandomNum].choices);
+        let newRandomNumber;
+        do {
+            newRandomNumber = Math.floor(Math.random() * 30);
+        } while (usedNum.includes(newRandomNumber));
+        
+        setUsedNum([...usedNum, randomNumber]);
+        setRandomNumber(newRandomNumber);
+        setQuestion(questions[newRandomNumber].question);
+        setChoices(questions[newRandomNumber].choices);
         setCount(prev => prev + 1);
     };
-
-    /*
-        TO DO:
-        - display ANSWERS and QUESTION_NUM after 5 
-    */
 
     return (
         <View style={styles.container}>
             <View>
-                <Text>QUESTION {count}</Text>
+                <Text>QUESTION {count} | {randomNumber}</Text>
                 <Text style={styles.question}>{question}</Text>
                 {
                     choices.map((item, index) =>
@@ -93,3 +91,11 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
 })
+
+/*
+15  9   19
+18  9   10
+14  29  3
+11  20  12
+1   0   18
+*/
