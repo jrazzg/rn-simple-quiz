@@ -8,8 +8,16 @@ const ResultsScreen = () => {
     if (!quizContext) throw new Error('Context not available');
     const { answers } = quizContext
 
+    let correctAns = 0;
+    answers.map((item) => {
+        if (item.answer === questions[item.id].answer){
+            correctAns++;
+        }
+    })
+
     return (
         <View style={styles.container}>
+            <Text style={styles.result}>{correctAns}/5</Text>
             {
                 answers.map((item, index) =>
                     <View style={[styles.answersContainer, {backgroundColor: item.answer === questions[item.id].answer ? '#91f896ff' : '#fddedeff'}]} key={index}>
@@ -29,6 +37,11 @@ const styles = StyleSheet.create({
         marginTop: 80,
         flex: 1,
         margin: 20,
+    },
+    result: {
+        fontSize: 100,
+        textAlign: 'center',
+        marginBottom: 20,
     },
     answersContainer: {
         marginBottom: 20,
